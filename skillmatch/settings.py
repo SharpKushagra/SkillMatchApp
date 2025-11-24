@@ -27,12 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c6%l8tq0&1l&u7zp@he7o@*lt979vsd1tji9z^%-v$p@0hmo@g'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# SECRET_KEY, DEBUG, and ALLOWED_HOSTS are now set at the bottom of the file
 
 
 # Application definition
@@ -182,9 +177,9 @@ LOGGING = {
         },
     },
 }
-ADZUNA_API_ID = config('ADZUNA_API_ID')
-ADZUNA_API_KEY = config('ADZUNA_API_KEY')
-GITHUB_API_TOKEN = config('GITHUB_API_TOKEN')
+ADZUNA_API_ID = config('ADZUNA_API_ID', default='')
+ADZUNA_API_KEY = config('ADZUNA_API_KEY', default='')
+GITHUB_API_TOKEN = config('GITHUB_API_TOKEN', default='')
 
 # settings.py
 
@@ -194,8 +189,16 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Add to INSTALLED_APPS
-'django.contrib.staticfiles',
+# Production settings
+# SECRET_KEY, DEBUG, and ALLOWED_HOSTS can be overridden via environment variables
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-c6%l8tq0&1l&u7zp@he7o@*lt979vsd1tji9z^%-v$p@0hmo@g')
+DEBUG = config('DEBUG', default=True, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=lambda v: [s.strip() for s in v.split(',') if s.strip()] if v else [])
 
-# Add to TEMPLATES context processors
-'django.template.context_processors.static',
+# WhiteNoise for static files in production (only if whitenoise is installed)
+try:
+    import whitenoise
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+except ImportError:
+    pass  # WhiteNoise not installed, skip it

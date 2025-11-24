@@ -21,9 +21,9 @@ logger = logging.getLogger(__name__)
 nlp = spacy.load("en_core_web_sm")
 
 # Load API keys from environment variables
-ADZUNA_API_ID = config('ADZUNA_API_ID')
-ADZUNA_API_KEY = config('ADZUNA_API_KEY')
-GITHUB_API_TOKEN = config('GITHUB_API_TOKEN')
+ADZUNA_API_ID = config('ADZUNA_API_ID', default='')
+ADZUNA_API_KEY = config('ADZUNA_API_KEY', default='')
+GITHUB_API_TOKEN = config('GITHUB_API_TOKEN', default='')
 
 def extract_skills(text):
     if not text:

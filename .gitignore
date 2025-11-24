@@ -1,16 +1,48 @@
 # Ignore environment files
 .env
+.env.local
+.env.*.local
 
 # Ignore log files
 *.log
-
-
+debug.log
 
 # Ignore Python cache
-_pycache_/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-# Ignore compiled files
-*.pyc
+# Ignore virtual environments
+venv/
+env/
+ENV/
+.venv
 
 # Ignore database files
 *.sqlite3
+*.db
+
+# Ignore static files (collected by collectstatic)
+staticfiles/
+*.static
+
+# Ignore media files (if any)
+media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build files
+build/
+dist/
+*.egg-info/
